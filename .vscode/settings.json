@@ -16,6 +16,5 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "typescript.preferences.importModuleSpecifierEnding": "js",
   "editor.codeActionsOnSave": { "source.fixAll.eslint": "always" }
 }
