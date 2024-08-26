@@ -1,3 +1,49 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next/core-web-vitals", "prettier"],
+  "plugins": ["import"],
+  "rules": {
+    "import/extensions": 1,
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [".*"],
+        "paths": [
+          {
+            "name": "react",
+            "importNames": ["default"],
+            "message": "import React from 'react' makes bundle size larger."
+          }
+        ]
+      }
+    ],
+    "sort-imports": [
+      "warn",
+      {
+        "ignoreCase": false,
+        "ignoreDeclarationSort": false,
+        "ignoreMemberSort": false,
+        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
+        "allowSeparatedGroups": false
+      }
+    ],
+    "import/order": [
+      "warn",
+      {
+        "groups": ["builtin", "external", "internal"], // 그룹핑 순서
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"], // external로 간주되어 alias 적용안되는 문제 해결
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true // 대문자 우선
+        },
+        "newlines-between": "always" // 그룹별 모두 한줄 띄우기
+      }
+    ]
+  }
 }
