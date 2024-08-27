@@ -1,45 +1,33 @@
-import NextAuth from 'next-auth'
+import NextAuth from "next-auth"
+import Credentials from "next-auth/providers/credentials"
 
-const HOUR = 60 * 60
+import { signInSchema } from "@/lib/zod"
 
-export const {
-  handlers,
-  signIn,
-  signOut,
-  auth,
-  update
-} = NextAuth({
-  providers: [
-  ],
-  session: {
-    strategy: 'jwt',
-    maxAge: 24 * HOUR
-  },
-  pages: {
-    signIn: '/signin' // Default: '/auth/signin'
-  },
-  callbacks: {
-    signIn: async () => {
-      return true
-    },
-    jwt: async ({ token, user }) => {
-      return token
-    },
-    session: async ({ session, token }) => {
-      return session
-    },
-    redirect: async ({ url, baseUrl }) => {
-      if (url.startsWith('/')) return `${baseUrl}${url}`
-      if (url) {
-        const { search, origin } = new URL(url)
-        const callbackUrl = new URLSearchParams(search).get('callbackUrl')
-        if (callbackUrl)
-          return callbackUrl.startsWith('/')
-            ? `${baseUrl}${callbackUrl}`
-            : callbackUrl
-        if (origin === baseUrl) return url
-      }
-      return baseUrl
-    }
-  }
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers:
+    [
+      Credentials({
+        credentials: {
+          email: {},
+          password: {},
+        },
+        authorize: async (credentials) => {
+          let user = null
+   
+          // logic to verify if the user exists
+          const { email, password } = await signInSchema.parseAsync(credentials)
+          user = { email, password }
+          // user = await getUserFromDb(email, password)
+   
+          if (!user) {
+            // No user found, so this is their first attempt to login
+            // meaning this is also the place you could do registration
+            throw new Error("User not found.")
+          }
+   
+          // return user object with their profile data
+          return user
+        },
+      })
+    ],
 })

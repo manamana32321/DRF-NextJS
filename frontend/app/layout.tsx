@@ -1,7 +1,7 @@
-import "@/app/global";
+import "./globals.css";
 import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
 
-import Header from "@/components/Header";
 import { inter } from "@/styles/font";
 
 export const metadata: Metadata = {
@@ -15,9 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <Header />
-      <body className={inter.className}>{children}</body>
-    </html>
+    <SessionProvider>
+      <html lang="en">
+        <body className={inter.className}>{children}</body>
+      </html>
+    </SessionProvider>
   );
 }

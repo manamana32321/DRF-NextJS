@@ -3,19 +3,6 @@
   "plugins": ["import"],
   "rules": {
     "import/extensions": 1,
-    "no-restricted-imports": [
-      "warn",
-      {
-        "patterns": [".*"],
-        "paths": [
-          {
-            "name": "react",
-            "importNames": ["default"],
-            "message": "import React from 'react' makes bundle size larger."
-          }
-        ]
-      }
-    ],
     "import/order": [
       "warn",
       {
